@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Usuários</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/static/api.js"></script>
+</head>
+<body>
+    <header>
+        <a href="/"><h1>{{ webconfig["name"] }}</h1></a>
+        <div class="links">
+            <a href="/cadastro_usuarios">Cadastro de Usuários</a>
+            <a href="/cadastro_tarefas" class="selected">Cadastro de Tarefas</a>
+            <a href="/gerenciar_tarefas">Gerenciar Tarefas</a>
+        </div>
+    </header>
+    
+    <div class="form">
+        <h3>Cadastro de Tarefas</h3>
+
+        <input type="text" name="input-descricao" id="input-descricao" placeholder="Descrição">
+        <input type="text" name="input-setor" id="input-setor" placeholder="Setor">
+        <br>
+
+        <label for="input-usuario">Usuário</label>
+        <select name="input-usuario" id="input-usuario" required>
+            {% for user in users %}
+                <option value="{{user.id}}">{{user.nome}} &lt;{{user.email}}&gt;</option>
+            {% endfor %}
+        </select>
+
+        <label for="input-prioridade">Prioridade</label>
+        <select name="input-prioridade" id="input-prioridade" required>
+            <option value="baixa" selected>Baixa</option>
+            <option value="media">Média</option>
+            <option value="alta">Alta</option>
+        </select>
+
+        <button id="btn-cadastrar" >{% if editar %}Editar{% else %}Cadastrar{% endif %}</button>
+
+        <script>
+
+            {% if editar %}
+                document.querySelector('#input-descricao').value = "{{tarefa.descricao}}";
+                document.querySelector('#input-setor').value = "{{tarefa.setor}}";
+                document.querySelector('#input-usuario').value = "{{tarefa.usuario}}";
+                document.querySelector('#input-prioridade').value = "{{tarefa.prioridade}}";
+            {% endif %}
+
+            button = document.querySelector('#btn-cadastrar');
+
+            user = document.querySelector('#input-usuario');
+
+            button.onclick = () => {
+                _loading_btn(button);
+    
+                const descricao = document.querySelector('#input-descricao').value;
+                const setor = document.querySelector('#input-setor').value;
+                const usuario = document.querySelector('#input-usuario').value;
+                const prioridade = document.querySelector('#input-prioridade').value;
+    
+                {% if editar %}
+                api('/api/tarefas/editar',{
+                    idTarefa: {{tarefa.id}},
+                    descricao: descricao,
+                    setor: setor,
+                    usuario: usuario,
+                    prioridade: prioridade
+                }, () => location.reload());
+                {% else %}
+                api('/api/tarefas/cadastro',{
+                    descricao: descricao,
+                    setor: setor,
+                    usuario: usuario,
+                    prioridade: prioridade
+                }, () => location.reload());
+                {% endif %}
+            }
+        </script>
+    </div>
+</body>
+</html>

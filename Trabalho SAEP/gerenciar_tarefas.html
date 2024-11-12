@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Tarefas</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/static/api.js"></script>
+</head>
+
+<body>
+    <header>
+        <a href="/">
+            <h1>{{ webconfig["name"] }}</h1>
+        </a>
+        <div class="links">
+            <a href="/cadastro_usuarios">Cadastro de Usuários</a>
+            <a href="/cadastro_tarefas">Cadastro de Tarefas</a>
+            <a href="/gerenciar_tarefas" class="selected">Gerenciar Tarefas</a>
+        </div>
+    </header>
+
+    <h2 class="titulo">Tarefas</h2>
+    <div class="tarefas">
+        <section class="cards">
+            <h3>A Fazer</h3>
+            {% for tarefa in tarefas %}
+                {% if tarefa.status == "A Fazer" %}
+                <div class="card">
+                    <p><strong>Descrição: </strong>{{tarefa.descricao}}</p>
+                    <p><strong>Setor: </strong>{{tarefa.setor}}</p>
+                    <p><strong>Prioridade: </strong>{{tarefa.prioridade}}</p>
+                    <p><strong>Vinculado a: </strong>{{tarefa.user}}</p>
+                    <button class="card-button" data-tarefa="{{tarefa.id}}" onclick="btn_editar(this)">Editar</button>
+                    <button class="card-button" data-tarefa="{{tarefa.id}}" onclick="btn_excluir(this)">Excluir</button>
+                    <br>
+                    <select name="select-prioridade" id="select-prioridade-{{tarefa.id}}" class="select-prioridade">
+                        <option value="A Fazer" selected>A Fazer</option>
+                        <option value="Fazendo">Fazendo</option>
+                        <option value="Feito">Feito</option>
+                    </select>
+                    <button class="card-button" data-tarefa="{{tarefa.id}}" onclick="btn_alterar_status(this)">Alterar Status</button>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </section>
+        <section class="cards">
+            <h3>Fazendo</h3>
+            {% for tarefa in tarefas %}
+                {% if tarefa.status == "Fazendo" %}
+                <div class="card">
+                    <p><strong>Descrição: </strong>{{tarefa.descricao}}</p>
+                    <p><strong>Setor: </strong>{{tarefa.setor}}</p>
+                    <p><strong>Prioridade: </strong>{{tarefa.prioridade}}</p>
+                    <p><strong>Vinculado a: </strong>{{tarefa.user}}</p>
+                    <button class="card-button" data-tarefa="{{tarefa.id}}" onclick="btn_editar(this)">Editar</button>
+                    <button class="card-button" data-tarefa="{{tarefa.id}}" onclick="btn_excluir(this)">Excluir</button>
+                    <br>
+                    <select name="select-prioridade" id="select-prioridade-{{tarefa.id}}" class="select-prioridade">
+                        <option value="A Fazer">A Fazer</option>
+                        <option value="Fazendo" selected>Fazendo</option>
+                        <option value="Feito">Feito</option>
+                    </select>
+                    <button class="card-button" data-tarefa="{{tarefa.id}}" onclick="btn_alterar_status(this)">Alterar Status</button>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </section>
+        <section class="cards">
+            <h3>Feito</h3>
+            {% for tarefa in tarefas %}
+                {% if tarefa.status == "Feito" %}
+                    <div class="card">
+                        <p><strong>Descrição: </strong>{{tarefa.descricao}}</p>
+                        <p><strong>Setor: </strong>{{tarefa.setor}}</p>
+                        <p><strong>Prioridade: </strong>{{tarefa.prioridade}}</p>
+                        <p><strong>Vinculado a: </strong>{{tarefa.user}}</p>
+                        <button class="card-button" data-tarefa="{{tarefa.id}}" onclick="btn_editar(this)">Editar</button>
+                        <button class="card-button" data-tarefa="{{tarefa.id}}" onclick="btn_excluir(this)">Excluir</button>
+                        <br>
+                        <select name="select-prioridade" id="select-prioridade-{{tarefa.id}}" class="select-prioridade">
+                            <option value="A Fazer">A Fazer</option>
+                            <option value="Fazendo">Fazendo</option>
+                            <option value="Feito" selected>Feito</option>
+                        </select>
+                        <button class="card-button" data-tarefa="{{tarefa.id}}" onclick="btn_alterar_status(this)">Alterar Status</button>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </section>
+    </div>
+
+    <script>
+
+        
+
+        function btn_editar (btn) {
+            _loading_btn(btn);
+            location.assign('/cadastro_tarefas/'.concat(btn.getAttribute('data-tarefa')));
+
+        }
+
+        function btn_excluir (btn) {
+            _loading_btn(btn);
+            api('/api/tarefas/excluir', {
+                idTarefa: btn.getAttribute('data-tarefa')
+            }, () => location.reload())
+        }
+
+        function btn_alterar_status (btn) {
+            _loading_btn(btn);
+            api('/api/tarefas/atualiza/status', {
+                idTarefa: btn.getAttribute('data-tarefa'),
+                newStatus: document.querySelector('#select-prioridade-'.concat(btn.getAttribute('data-tarefa'))).value 
+            }, () => location.reload())
+        }
+    </script>
+</body>
+
+</html>

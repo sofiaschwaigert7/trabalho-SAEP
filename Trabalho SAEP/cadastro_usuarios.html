@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Usuários</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/static/api.js"></script>
+</head>
+
+<body>
+    <header>
+        <a href="/">
+            <h1>{{ webconfig["name"] }}</h1>
+        </a>
+        <div class="links">
+            <a href="/cadastro_usuarios" class="selected">Cadastro de Usuários</a>
+            <a href="/cadastro_tarefas">Cadastro de Tarefas</a>
+            <a href="/gerenciar_tarefas">Gerenciar Tarefas</a>
+        </div>
+    </header>
+
+    <div class="form">
+        <h3>Cadastro de Usuários</h3>
+        <input type="text" name="input-nome" id="input-nome" placeholder="Nome">
+        <input type="email" name="input-email" id="input-email" placeholder="Email">
+        <button id="btn-cadastrar">Cadastrar</button>
+    </div>
+
+    <script>
+        button = document.querySelector('#btn-cadastrar');
+
+        button.onclick = () => {
+            _loading_btn(button);
+
+            const nome = document.querySelector('#input-nome').value;
+            const email = document.querySelector('#input-email').value;
+
+            api('/api/usuarios/cadastro', {
+                nome: nome,
+                email: email
+            }, () => {location.reload()});
+        }
+    </script>
+</body>
+
+</html>

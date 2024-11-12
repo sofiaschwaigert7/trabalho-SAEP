@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Usuários</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <a href="/"><h1>{{ webconfig["name"] }}</h1></a>
+        <div class="links">
+            <a href="/cadastro_usuarios">Cadastro de Usuários</a>
+            <a href="/cadastro_tarefas">Cadastro de Tarefas</a>
+            <a href="/gerenciar_tarefas">Gerenciar Tarefas</a>
+        </div>
+    </header>
+
+    <div class="index-welcome">
+        <h2>{{ webconfig["bemvindo"] }}</h2>
+        <h1>{{ webconfig["name"] }}</h1>
+        <p>{{ webconfig["copyright"] }}</p>
+    </div>
+
+</body>
+</html>

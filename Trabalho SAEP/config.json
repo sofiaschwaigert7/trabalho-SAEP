@@ -1,0 +1,14 @@
+{
+    "mysql": {
+        "host": "localhost",
+        "port": 3306,
+        "user": "admin",
+        "pass": "admin",
+        "database": "staging_db"
+    },
+    "web": {
+        "bemvindo": "Bem vindo ao sistema de gerenciamento da",
+        "name": "JUNO ALIMENTOS",
+        "copyright": "Copyright (c) 2024 Rafael Longhi"
+    }
+}
